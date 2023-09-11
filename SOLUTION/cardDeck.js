@@ -55,26 +55,37 @@ class Card {
         this.#cardObj = cardObj;
     }
 
-    //// TODO  
     changeStatus = (newStatus) => {        
-        if(newStatus != CardStatuses.ONEDECK || 
-            newStatus != CardStatuses.ONHAND ||
-            newStatus != CardStatuses.ONGAME ||
-            newStatus != CardStatuses.DISCARD) {
-                console.error("EROR! in changeStatus. WRONG new status")
+        if (this.#status == CardStatuses.ONEDECK) { ////* (в колоде)
+            if (newStatus == CardStatuses.ONHAND) {
+                this.#status = newStatus;
             } else {
-                if(this.#status == CardStatuses.ONEDECK) { ////* (в колоде)
-                    if(newStatus == CardStatuses.ONHAND) {
-                        this.#status = newStatus;
-                    } else {
-                        console.error(`Wrong status - ${newStatus} in changeStatus`);
-                    }
-                } else if(this.#status == CardStatuses.ONHAND) { //// * КАРТА НА РУКАХ
-        
-                } else if(this.#status == CardStatuses.ONGAME) { //// * ONGAME - карта выкинута на поле
-        
-                } else if(this.#status == CardStatuses.DISCARD) { //// * КАРТА В ОТБОЕ
+                console.error(`Wrong status - ${newStatus} in changeStatus`);
             }
+        } else if (this.#status == CardStatuses.ONHAND) { //// * КАРТА НА РУКАХ
+            if (newStatus == CardStatuses.ONGAME) {
+                this.#status = newStatus;
+            } else if (newStatus == CardStatuses.DISCARD) {
+                this.#status = newStatus;
+            } else {
+                console.error(`Wrong status - ${newStatus} in changeStatus`);
+            }
+        } else if (this.#status == CardStatuses.ONGAME) { //// * ONGAME - карта выкинута на поле
+            if (newStatus == CardStatuses.ONHAND) {
+                this.#status = newStatus;
+            } else if (newStatus == CardStatuses.DISCARD) {
+                this.#status = newStatus;
+            } else {
+                console.error(`Wrong status - ${newStatus} in changeStatus`);
+            }
+        } else if (this.#status == CardStatuses.DISCARD) { //// * КАРТА В ОТБОЕ
+            if (newStatus == CardStatuses.ONHAND) {
+                console.error(`Wrong status - ${newStatus} in changeStatus`);
+            } else if (newStatus == CardStatuses.ONEDECK) {
+                console.error(`Wrong status - ${newStatus} in changeStatus`);
+            } else if (newStatus == CardStatuses.ONGAME) {
+                console.error(`Wrong status - ${newStatus} in changeStatus`);
+            } 
         }
     }
 
@@ -197,5 +208,17 @@ myCardDesk.printInConsole();
 
 
 console.log("\n\nПроверка изменения статуса карты в колоде\n");
+console.log(myCardDesk.getCard(0));
 
+myCardDesk.getCard(0).changeStatus(CardStatuses.ONHAND);
+console.log(myCardDesk.getCard(0));
 
+myCardDesk.getCard(0).changeStatus(CardStatuses.DISCARD);
+console.log(myCardDesk.getCard(0));
+
+myCardDesk.getCard(0).changeStatus(CardStatuses.DISCARD);
+console.log(myCardDesk.getCard(0));
+
+console.log("Тут будет ОШИБКА, так как карте не может попасть из отбоя в игру!")
+myCardDesk.getCard(0).changeStatus(CardStatuses.ONGAME);
+console.log(myCardDesk.getCard(0));
