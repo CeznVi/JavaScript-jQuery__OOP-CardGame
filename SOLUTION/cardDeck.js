@@ -32,12 +32,6 @@ class CardInitializer {
 
 }
 
-//// ! TEST 
-// for(let i =0; i < CardInitializer.getCountCards(); i++)
-// {
-//     console.log(CardInitializer.getOneCard(i));
-// }
-
 class Card {
     #cardObj = null;
     #isTrump = false;
@@ -49,7 +43,13 @@ class Card {
 
     //// TODO  
     changeStatus = (newStatus) => {
-
+        //// ! сделать кучу проверок в плане карта из отбоя не может попасть в игру и не может попасть в руки.
+        
+        // if(newStatus == CardStatuses) {
+        //     this.#cardObj.status = newStatus;
+        // } else {
+        //     console.error('Erorr in change status');
+        // }
     }
 
         //// TODO  
@@ -71,19 +71,16 @@ class Card {
 
     //// TODO
     getTrump = () => {
-
+        return this.#isTrump;
     }
 
     //// TODO  
     getStatus = () => {
-
+        return this.#status;
     }
 
 
 }
-
-/// ? SIMPLE
-console.log(new Card(CardInitializer.getOneCard(0)));
 
 class CardDeck {
     #cards = [];
@@ -112,3 +109,25 @@ class CardDeck {
 
 
 }
+
+//// ! TEST 
+// for(let i =0; i < CardInitializer.getCountCards(); i++)
+// {
+//     console.log(CardInitializer.getOneCard(i));
+// }
+
+
+//// ! TEST   
+//console.log(new Card(CardInitializer.getOneCard(0)).getSuit());
+
+//// ? создаем колоду карт
+var myCardDesk = new CardDeck();
+//// * ТЕСТ метода getCard
+console.log("Kартa 0 ="); 
+console.log(myCardDesk.getCard(0));
+
+console.log( "Масть карты 0 = "  + (myCardDesk.getCard(0)).getSuit() );
+console.log( "VALUE карты 0 = "  + (myCardDesk.getCard(0)).getValue() );
+console.log( "POINTS карты 0 = "  + (myCardDesk.getCard(0)).getPoints() );
+console.log("Козырная ли карта 0 = " + (myCardDesk.getCard(0).getTrump()));
+console.log( "Текущий статус карты 0 = "  + (myCardDesk.getCard(0)).getStatus() );
