@@ -10,12 +10,14 @@ var CardStatuses = {
 CardStatuses = Object.freeze(CardStatuses);
 
 class CardInitializer {
-    static #values = ['6','7','8','9','19', 'V', 'Q', 'K','A'];
+
+    static #values = ['6','7','8','9','10', 'V', 'Q', 'K','A'];
     static #suit = ['♥', '♦' , '♠', '☩'];
     
     static getCountCards = () => {
         return this.#values.length * this.#suit.length;
     }
+
     static getOneCard = (index) => {
         if(index >= 0 && index < this.getCountCards()) {
             return {
@@ -29,10 +31,22 @@ class CardInitializer {
         }
     }
 
+    static getSuit = (index) => {
+        return this.#suit[index];
+    }
 
+    static isPossibleSuit = (suit) => {
+        if(this.#suit.includes(suit)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 }
 
 class Card {
+
     #cardObj = null;
     #isTrump = false;
     #status = CardStatuses.ONEDECK;
@@ -52,8 +66,15 @@ class Card {
         // }
     }
 
-        //// TODO  
     changeTrump = (newTrump) => {
+
+        if(CardInitializer.isPossibleSuit(newTrump)) {
+            if(this.#cardObj.suit == newTrump) {
+                this.#isTrump = true;
+            }
+        } else {
+            console.error('Error. Wrong trump in chengeTrump');
+        }
 
     }
 
@@ -69,12 +90,10 @@ class Card {
         return this.#cardObj.points;
     }
 
-    //// TODO
     getTrump = () => {
         return this.#isTrump;
     }
 
-    //// TODO  
     getStatus = () => {
         return this.#status;
     }
@@ -86,9 +105,14 @@ class CardDeck {
     #cards = [];
 
     constructor() {
+        //// ? инициализация всех карт в конструкторе
         for (let i = 0; i < CardInitializer.getCountCards(); i++){
             this.#cards.push(new Card(CardInitializer.getOneCard(i)));
         }
+    }
+
+    getCardCount = () => {
+        return this.#cards.length;
     }
 
     getCard = (index) => {
@@ -96,19 +120,34 @@ class CardDeck {
     }
 
     shuffle = () => {
-    
+        for (let i = this.#cards.length - 1; i > 0; i--) { 
+            const j = Math.floor(Math.random() * (i + 1)); 
+            [this.#cards[i], this.#cards[j]] = [this.#cards[j], this.#cards[i]]; 
+        }
     }
 
     checkTrump = () => {
+        let newTrumpSuit = CardInitializer.getSuit(Math.floor(Math.random() * 4));
         
+        for(let i = 0; i < this.#cards.length; i++){
+            this.#cards[i].changeTrump(newTrumpSuit);
+        }
     }
-
+        //// TODO
     reInit = () => {
         
     }
 
+    //// * Вывести в консоль колоду карт
+    printInConsole = () => {
+        for(let c= 0; c < myCardDesk.getCardCount();c++) {
+            console.log( `Kартa № ${c}, Масть =  ` + (myCardDesk.getCard(c)).getSuit() + ` VALUE = `  + (myCardDesk.getCard(c)).getValue() 
+            + ` points = ` +  (myCardDesk.getCard(c)).getPoints() + ` isTrump = ` +  (myCardDesk.getCard(c)).getTrump());
+        }
+    }
 
 }
+
 
 //// ! TEST 
 // for(let i =0; i < CardInitializer.getCountCards(); i++)
@@ -117,17 +156,31 @@ class CardDeck {
 // }
 
 
-//// ! TEST   
-//console.log(new Card(CardInitializer.getOneCard(0)).getSuit());
-
-//// ? создаем колоду карт
+//// ! создаем колоду карт   
 var myCardDesk = new CardDeck();
-//// * ТЕСТ метода getCard
-console.log("Kартa 0 ="); 
-console.log(myCardDesk.getCard(0));
 
-console.log( "Масть карты 0 = "  + (myCardDesk.getCard(0)).getSuit() );
-console.log( "VALUE карты 0 = "  + (myCardDesk.getCard(0)).getValue() );
-console.log( "POINTS карты 0 = "  + (myCardDesk.getCard(0)).getPoints() );
-console.log("Козырная ли карта 0 = " + (myCardDesk.getCard(0).getTrump()));
-console.log( "Текущий статус карты 0 = "  + (myCardDesk.getCard(0)).getStatus() );
+console.log("КОЛОДА КАРТ");
+myCardDesk.printInConsole();
+
+// console.log("Проверка тусования колоды");
+// myCardDesk.shuffle();
+// myCardDesk.printInConsole();
+
+console.log("\n\nПроверка изменения козыря (checkTrump)\n");
+myCardDesk.checkTrump();
+
+console.log("КОЛОДА КАРТ");
+myCardDesk.printInConsole();
+
+
+
+
+// console.log("Kартa 0 ="); 
+// console.log(myCardDesk.getCard(0));
+// console.log( "Масть карты 0 = "  + (myCardDesk.getCard(0)).getSuit() );
+// console.log( "VALUE карты 0 = "  + (myCardDesk.getCard(0)).getValue() );
+// console.log( "POINTS карты 0 = "  + (myCardDesk.getCard(0)).getPoints() );
+// console.log("Козырная ли карта 0 = " + (myCardDesk.getCard(0).getTrump()));
+// console.log( "Текущий статус карты 0 = "  + (myCardDesk.getCard(0)).getStatus() );
+
+
