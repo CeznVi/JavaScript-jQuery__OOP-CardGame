@@ -56,14 +56,26 @@ class Card {
     }
 
     //// TODO  
-    changeStatus = (newStatus) => {
-        //// ! сделать кучу проверок в плане карта из отбоя не может попасть в игру и не может попасть в руки.
+    changeStatus = (newStatus) => {        
+        if(newStatus != CardStatuses.ONEDECK || 
+            newStatus != CardStatuses.ONHAND ||
+            newStatus != CardStatuses.ONGAME ||
+            newStatus != CardStatuses.DISCARD) {
+                console.error("EROR! in changeStatus. WRONG new status")
+            } else {
+                if(this.#status == CardStatuses.ONEDECK) { ////* (в колоде)
+                    if(newStatus == CardStatuses.ONHAND) {
+                        this.#status = newStatus;
+                    } else {
+                        console.error(`Wrong status - ${newStatus} in changeStatus`);
+                    }
+                } else if(this.#status == CardStatuses.ONHAND) { //// * КАРТА НА РУКАХ
         
-        // if(newStatus == CardStatuses) {
-        //     this.#cardObj.status = newStatus;
-        // } else {
-        //     console.error('Erorr in change status');
-        // }
+                } else if(this.#status == CardStatuses.ONGAME) { //// * ONGAME - карта выкинута на поле
+        
+                } else if(this.#status == CardStatuses.DISCARD) { //// * КАРТА В ОТБОЕ
+            }
+        }
     }
 
     changeTrump = (newTrump) => {
