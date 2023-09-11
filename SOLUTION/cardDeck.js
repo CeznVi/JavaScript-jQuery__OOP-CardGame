@@ -71,6 +71,7 @@ class Card {
         if(CardInitializer.isPossibleSuit(newTrump)) {
             if(this.#cardObj.suit == newTrump) {
                 this.#isTrump = true;
+                this.#cardObj.points += 100;
             }
         } else {
             console.error('Error. Wrong trump in chengeTrump');
@@ -105,10 +106,11 @@ class CardDeck {
     #cards = [];
 
     constructor() {
-        //// ? инициализация всех карт в конструкторе
+        //// ? инициализация всех карт в конструкторе + определение козыря
         for (let i = 0; i < CardInitializer.getCountCards(); i++){
             this.#cards.push(new Card(CardInitializer.getOneCard(i)));
         }
+        
     }
 
     getCardCount = () => {
@@ -133,9 +135,15 @@ class CardDeck {
             this.#cards[i].changeTrump(newTrumpSuit);
         }
     }
-        //// TODO
+
     reInit = () => {
-        
+        this.#cards.length = 0;
+
+        for (let i = 0; i < CardInitializer.getCountCards(); i++){
+            this.#cards.push(new Card(CardInitializer.getOneCard(i)));
+        }
+
+        this.checkTrump();
     }
 
     //// * Вывести в консоль колоду карт
@@ -162,25 +170,20 @@ var myCardDesk = new CardDeck();
 console.log("КОЛОДА КАРТ");
 myCardDesk.printInConsole();
 
-// console.log("Проверка тусования колоды");
-// myCardDesk.shuffle();
-// myCardDesk.printInConsole();
+console.log("Проверка тусования колоды");
+myCardDesk.shuffle();
+myCardDesk.printInConsole();
 
 console.log("\n\nПроверка изменения козыря (checkTrump)\n");
 myCardDesk.checkTrump();
-
-console.log("КОЛОДА КАРТ");
 myCardDesk.printInConsole();
 
 
+console.log("\n\nПроверка пересоздания колоды (reInit)\n");
+myCardDesk.reInit();
+myCardDesk.printInConsole();
 
 
-// console.log("Kартa 0 ="); 
-// console.log(myCardDesk.getCard(0));
-// console.log( "Масть карты 0 = "  + (myCardDesk.getCard(0)).getSuit() );
-// console.log( "VALUE карты 0 = "  + (myCardDesk.getCard(0)).getValue() );
-// console.log( "POINTS карты 0 = "  + (myCardDesk.getCard(0)).getPoints() );
-// console.log("Козырная ли карта 0 = " + (myCardDesk.getCard(0).getTrump()));
-// console.log( "Текущий статус карты 0 = "  + (myCardDesk.getCard(0)).getStatus() );
+console.log("\n\nПроверка изменения статуса карты в колоде\n");
 
 
